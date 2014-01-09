@@ -16,6 +16,7 @@
 package com.squareup.picasso;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -41,13 +42,13 @@ final class PicassoDrawable extends BitmapDrawable {
    * image.
    */
   static void setBitmap(ImageView target, Context context, Bitmap bitmap,
-      Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging) {
+      Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging, TargetTransformation targetTransformation) {
     Drawable placeholder = target.getDrawable();
     if (placeholder instanceof AnimationDrawable) {
       ((AnimationDrawable) placeholder).stop();
     }
     PicassoDrawable drawable =
-        new PicassoDrawable(context, bitmap, placeholder, loadedFrom, noFade, debugging);
+        new PicassoDrawable(context, bitmap, placeholder, loadedFrom, noFade, debugging, targetTransformation);
     target.setImageDrawable(drawable);
   }
 
@@ -65,6 +66,7 @@ final class PicassoDrawable extends BitmapDrawable {
   private final boolean debugging;
   private final float density;
   private final Picasso.LoadedFrom loadedFrom;
+  final Drawable image;
 
   Drawable placeholder;
 
@@ -73,13 +75,19 @@ final class PicassoDrawable extends BitmapDrawable {
   int alpha = 0xFF;
 
   PicassoDrawable(Context context, Bitmap bitmap, Drawable placeholder,
-      Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging) {
-    super(context.getResources(), bitmap);
+      Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging, TargetTransformation targetTransformation) {
+    Resources res = context.getResources();
 
     this.debugging = debugging;
     this.density = context.getResources().getDisplayMetrics().density;
 
     this.loadedFrom = loadedFrom;
+
+    if (targetTransformation == null) {
+        this.image = new BitmapDrawable(res, bitmap);
+    } else {
+        this.image = targetTransformation.transform(bitmap);
+    }
 
     boolean fade = loadedFrom != MEMORY && !noFade;
     if (fade) {

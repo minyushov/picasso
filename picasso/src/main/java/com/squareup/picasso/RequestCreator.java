@@ -338,6 +338,15 @@ public class RequestCreator {
   }
 
   /**
+   * Transform the target Drawable the final bitmap will be wrapped into. This allows modifying
+   * underlying drawable and creating more advanced effect without need to create another bitmap.
+   */
+  public RequestCreator transformTarget(TargetTransformation targetTransformation) {
+    data.targetTransform(targetTransformation);
+    return this;
+  }
+
+  /**
    * Specifies the {@link MemoryPolicy} to use for this request. You may specify additional policy
    * options using the varargs parameter.
    */
@@ -711,7 +720,7 @@ public class RequestCreator {
       Bitmap bitmap = picasso.quickMemoryCacheCheck(requestKey);
       if (bitmap != null) {
         picasso.cancelRequest(target);
-        setBitmap(target, picasso.context, bitmap, MEMORY, noFade, picasso.indicatorsEnabled);
+        setBitmap(target, picasso.context, bitmap, MEMORY, noFade, picasso.indicatorsEnabled, request.targetTransformation);
         if (picasso.loggingEnabled) {
           log(OWNER_MAIN, VERB_COMPLETED, request.plainId(), "from " + MEMORY);
         }

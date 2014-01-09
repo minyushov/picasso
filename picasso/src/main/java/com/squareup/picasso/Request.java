@@ -59,6 +59,7 @@ public final class Request {
   public final String stableKey;
   /** List of custom transformations to be applied after the built-in transformations. */
   public final List<Transformation> transformations;
+  public final TargetTransformation targetTransformation;
   /** Target image width for resizing. */
   public final int targetWidth;
   /** Target image height for resizing. */
@@ -94,10 +95,10 @@ public final class Request {
   public final Priority priority;
 
   private Request(Uri uri, int resourceId, String stableKey, List<Transformation> transformations,
-      int targetWidth, int targetHeight, boolean centerCrop, boolean centerInside,
-      int centerCropGravity, boolean onlyScaleDown, float rotationDegrees,
-      float rotationPivotX, float rotationPivotY, boolean hasRotationPivot,
-      boolean purgeable, Bitmap.Config config, Priority priority) {
+      TargetTransformation targetTransformation, int targetWidth, int targetHeight, boolean centerCrop,
+      boolean centerInside, int centerCropGravity, boolean onlyScaleDown, float rotationDegrees,
+      float rotationPivotX, float rotationPivotY, boolean hasRotationPivot, boolean purgeable,
+      Bitmap.Config config, Priority priority) {
     this.uri = uri;
     this.resourceId = resourceId;
     this.stableKey = stableKey;
@@ -106,6 +107,7 @@ public final class Request {
     } else {
       this.transformations = unmodifiableList(transformations);
     }
+    this.targetTransformation = targetTransformation;
     this.targetWidth = targetWidth;
     this.targetHeight = targetHeight;
     this.centerCrop = centerCrop;
@@ -221,6 +223,7 @@ public final class Request {
     private List<Transformation> transformations;
     private Bitmap.Config config;
     private Priority priority;
+    private TargetTransformation targetTransformation;
 
     /** Start building a request using the specified {@link Uri}. */
     public Builder(@NonNull Uri uri) {
@@ -253,6 +256,7 @@ public final class Request {
       hasRotationPivot = request.hasRotationPivot;
       purgeable = request.purgeable;
       onlyScaleDown = request.onlyScaleDown;
+      targetTransformation = request.targetTransformation;
       if (request.transformations != null) {
         transformations = new ArrayList<>(request.transformations);
       }
@@ -409,6 +413,18 @@ public final class Request {
       return this;
     }
 
+    /**
+     * Transform the target Drawable the final bitmap will be wrapped into. This allows modifying
+     * underlying drawable and creating more advanced effect without need to create another bitmap.
+     */
+    public Builder targetTransform(TargetTransformation targetTransformation) {
+      if (targetTransformation == null) {
+          throw new IllegalArgumentException("TargetTransformation must not be null.");
+      }
+      this.targetTransformation = targetTransformation;
+      return this;
+    }
+
     /** Rotate the image by the specified degrees around a pivot point. */
     public Builder rotate(float degrees, float pivotX, float pivotY) {
       rotationDegrees = degrees;
@@ -503,9 +519,9 @@ public final class Request {
       if (priority == null) {
         priority = Priority.NORMAL;
       }
-      return new Request(uri, resourceId, stableKey, transformations, targetWidth, targetHeight,
-          centerCrop, centerInside, centerCropGravity, onlyScaleDown, rotationDegrees,
-          rotationPivotX, rotationPivotY, hasRotationPivot, purgeable, config, priority);
+      return new Request(uri, resourceId, stableKey, transformations, targetTransformation,
+          targetWidth, targetHeight, centerCrop, centerInside, centerCropGravity, onlyScaleDown,
+          rotationDegrees, rotationPivotX, rotationPivotY, hasRotationPivot, purgeable, config, priority);
     }
   }
 }

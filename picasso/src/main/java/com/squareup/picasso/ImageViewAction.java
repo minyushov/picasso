@@ -46,7 +46,8 @@ class ImageViewAction extends Action<ImageView> {
 
     Context context = picasso.context;
     boolean indicatorsEnabled = picasso.indicatorsEnabled;
-    PicassoDrawable.setBitmap(target, context, result, from, noFade, indicatorsEnabled);
+    TargetTransformation targetTransformation = request == null ? null : request.targetTransformation;
+    PicassoDrawable.setBitmap(target, context, result, from, noFade, indicatorsEnabled, targetTransformation);
 
     if (callback != null) {
       callback.onSuccess();
