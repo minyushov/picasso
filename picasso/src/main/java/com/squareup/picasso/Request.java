@@ -95,10 +95,10 @@ public final class Request {
   public final Priority priority;
 
   private Request(Uri uri, int resourceId, String stableKey, List<Transformation> transformations,
-      TargetTransformation targetTransformation, int targetWidth, int targetHeight, boolean centerCrop,
-      boolean centerInside, int centerCropGravity, boolean onlyScaleDown, float rotationDegrees,
-      float rotationPivotX, float rotationPivotY, boolean hasRotationPivot, boolean purgeable,
-      Bitmap.Config config, Priority priority) {
+      TargetTransformation targetTransformation, int targetWidth, int targetHeight,
+      boolean centerCrop, boolean centerInside, int centerCropGravity, boolean onlyScaleDown,
+      float rotationDegrees, float rotationPivotX, float rotationPivotY, boolean hasRotationPivot,
+      boolean purgeable, Bitmap.Config config, Priority priority) {
     this.uri = uri;
     this.resourceId = resourceId;
     this.stableKey = stableKey;
@@ -521,7 +521,8 @@ public final class Request {
       }
       return new Request(uri, resourceId, stableKey, transformations, targetTransformation,
           targetWidth, targetHeight, centerCrop, centerInside, centerCropGravity, onlyScaleDown,
-          rotationDegrees, rotationPivotX, rotationPivotY, hasRotationPivot, purgeable, config, priority);
+          rotationDegrees, rotationPivotX, rotationPivotY, hasRotationPivot, purgeable, config,
+          priority);
     }
   }
 }

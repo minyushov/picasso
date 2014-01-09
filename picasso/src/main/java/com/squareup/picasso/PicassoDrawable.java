@@ -42,13 +42,15 @@ final class PicassoDrawable extends BitmapDrawable {
    * image.
    */
   static void setBitmap(ImageView target, Context context, Bitmap bitmap,
-      Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging, TargetTransformation targetTransformation) {
+      Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging,
+      TargetTransformation targetTransformation) {
     Drawable placeholder = target.getDrawable();
     if (placeholder instanceof AnimationDrawable) {
       ((AnimationDrawable) placeholder).stop();
     }
     PicassoDrawable drawable =
-        new PicassoDrawable(context, bitmap, placeholder, loadedFrom, noFade, debugging, targetTransformation);
+        new PicassoDrawable(context, bitmap, placeholder, loadedFrom, noFade,
+              debugging, targetTransformation);
     target.setImageDrawable(drawable);
   }
 
@@ -75,7 +77,8 @@ final class PicassoDrawable extends BitmapDrawable {
   int alpha = 0xFF;
 
   PicassoDrawable(Context context, Bitmap bitmap, Drawable placeholder,
-      Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging, TargetTransformation targetTransformation) {
+      Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging,
+      TargetTransformation targetTransformation) {
     Resources res = context.getResources();
 
     this.debugging = debugging;
