@@ -58,17 +58,16 @@ public class PicassoDrawableTest {
     assertThat(pd.animating).isFalse();
   }
 
-  @Test public void createWithTargetTransformerDrawable() {
+  @Test public void createWithDrawableFactory() {
     final BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
 
-    TargetTransformation targetTransformation = new TargetTransformation() {
-        @Override
-        public Drawable transform(Bitmap source) {
-            return bitmapDrawable;
-        }
+    DrawableFactory drawableFactory = new DrawableFactory() {
+      @Override public Drawable createDrawable(Bitmap source) {
+        return bitmapDrawable;
+      }
     };
 
-    PicassoDrawable pd = new PicassoDrawable(context, bitmap, null, DISK, false, false, targetTransformation);
+    PicassoDrawable pd = new PicassoDrawable(context, bitmap, null, DISK, false, false, drawableFactory);
     assertThat(pd.image).isSameAs(bitmapDrawable);
     assertThat(pd.getBitmap()).isSameAs(bitmap);
     assertThat(pd.placeholder).isNull();

@@ -43,14 +43,14 @@ final class PicassoDrawable extends BitmapDrawable {
    */
   static void setBitmap(ImageView target, Context context, Bitmap bitmap,
       Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging,
-      TargetTransformation targetTransformation) {
+      DrawableFactory drawableFactory) {
     Drawable placeholder = target.getDrawable();
     if (placeholder instanceof AnimationDrawable) {
       ((AnimationDrawable) placeholder).stop();
     }
     PicassoDrawable drawable =
         new PicassoDrawable(context, bitmap, placeholder, loadedFrom, noFade,
-              debugging, targetTransformation);
+              debugging, drawableFactory);
     target.setImageDrawable(drawable);
   }
 
@@ -78,7 +78,7 @@ final class PicassoDrawable extends BitmapDrawable {
 
   PicassoDrawable(Context context, Bitmap bitmap, Drawable placeholder,
       Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging,
-      TargetTransformation targetTransformation) {
+      DrawableFactory drawableFactory) {
     Resources res = context.getResources();
 
     this.debugging = debugging;
@@ -86,10 +86,10 @@ final class PicassoDrawable extends BitmapDrawable {
 
     this.loadedFrom = loadedFrom;
 
-    if (targetTransformation == null) {
-        this.image = new BitmapDrawable(res, bitmap);
+    if (drawableFactory != null) {
+      this.image = drawableFactory.createDrawable(bitmap);
     } else {
-        this.image = targetTransformation.transform(bitmap);
+      this.image = new BitmapDrawable(res, bitmap);
     }
 
     boolean fade = loadedFrom != MEMORY && !noFade;

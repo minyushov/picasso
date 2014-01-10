@@ -827,9 +827,12 @@ public class RequestCreatorTest {
     // TODO verify something!
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void nullTargetTransformationInvalid() throws Exception {
-      new RequestCreator().transformTarget(null);
+  @Test public void nullTargetTransformationInvalid() throws Exception {
+    try {
+      new RequestCreator().drawableFactory(null);
+      fail("Null DrawableFactory should throw exception");
+    } catch (IllegalArgumentException e) {
+    }
   }
 
   @Test public void nullTargetsInvalid() throws Exception {

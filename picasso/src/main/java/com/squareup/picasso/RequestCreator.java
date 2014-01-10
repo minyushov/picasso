@@ -338,11 +338,12 @@ public class RequestCreator {
   }
 
   /**
-   * Transform the target Drawable the final bitmap will be wrapped into. This allows modifying
-   * underlying drawable and creating more advanced effect without need to create another bitmap.
+   * Factory for creating a custom Drawable the final bitmap will be wrapped into.
+   * This allows modifying underlying drawable and creating more advanced effects
+   * without need to create another bitmap.
    */
-  public RequestCreator transformTarget(TargetTransformation targetTransformation) {
-    data.targetTransform(targetTransformation);
+  public RequestCreator drawableFactory(DrawableFactory drawableFactory) {
+    data.drawableFactory(drawableFactory);
     return this;
   }
 
@@ -720,7 +721,8 @@ public class RequestCreator {
       Bitmap bitmap = picasso.quickMemoryCacheCheck(requestKey);
       if (bitmap != null) {
         picasso.cancelRequest(target);
-        setBitmap(target, picasso.context, bitmap, MEMORY, noFade, picasso.indicatorsEnabled, request.targetTransformation);
+        setBitmap(target, picasso.context, bitmap, MEMORY, noFade, picasso.indicatorsEnabled,
+            request.drawableFactory);
         if (picasso.loggingEnabled) {
           log(OWNER_MAIN, VERB_COMPLETED, request.plainId(), "from " + MEMORY);
         }
