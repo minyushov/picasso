@@ -32,7 +32,7 @@ import android.widget.ImageView;
 import static android.graphics.Color.WHITE;
 import static com.squareup.picasso.Picasso.LoadedFrom.MEMORY;
 
-final class PicassoDrawable extends BitmapDrawable {
+final class PicassoDrawable extends Drawable {
   // Only accessed from main thread.
   private static final Paint DEBUG_PAINT = new Paint();
   private static final float FADE_DURATION = 200f; //ms
@@ -102,23 +102,23 @@ final class PicassoDrawable extends BitmapDrawable {
 
   @Override public void draw(Canvas canvas) {
     if (!animating) {
-      super.draw(canvas);
+      image.draw(canvas);
     } else {
       float normalized = (SystemClock.uptimeMillis() - startTimeMillis) / FADE_DURATION;
       if (normalized >= 1f) {
         animating = false;
         placeholder = null;
-        super.draw(canvas);
+        image.draw(canvas);
       } else {
         if (placeholder != null) {
           placeholder.draw(canvas);
         }
 
-        // setAlpha will call invalidateSelf and drive the animation.
         int partialAlpha = (int) (alpha * normalized);
-        super.setAlpha(partialAlpha);
-        super.draw(canvas);
-        super.setAlpha(alpha);
+        image.setAlpha(partialAlpha);
+        image.draw(canvas);
+        image.setAlpha(alpha);
+        invalidateSelf();
       }
     }
 
@@ -127,26 +127,41 @@ final class PicassoDrawable extends BitmapDrawable {
     }
   }
 
+  @Override
+  public int getIntrinsicWidth() {
+    return image.getIntrinsicWidth();
+  }
+
+  @Override
+  public int getIntrinsicHeight() {
+    return image.getIntrinsicHeight();
+  }
+
   @Override public void setAlpha(int alpha) {
     this.alpha = alpha;
     if (placeholder != null) {
       placeholder.setAlpha(alpha);
     }
-    super.setAlpha(alpha);
+    image.setAlpha(alpha);
   }
 
   @Override public void setColorFilter(ColorFilter cf) {
     if (placeholder != null) {
       placeholder.setColorFilter(cf);
     }
-    super.setColorFilter(cf);
+    image.setColorFilter(cf);
+  }
+
+  @Override
+  public int getOpacity() {
+    return image.getOpacity();
   }
 
   @Override protected void onBoundsChange(Rect bounds) {
     if (placeholder != null) {
       placeholder.setBounds(bounds);
     }
-    super.onBoundsChange(bounds);
+    image.setBounds(bounds);
   }
 
   private void drawDebugIndicator(Canvas canvas) {
