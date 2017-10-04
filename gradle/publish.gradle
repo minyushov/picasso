@@ -1,0 +1,138 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+afterEvaluate { project ->
+  project.archivesBaseName = POM_ARTIFACT_ID
+  group = POM_GROUP_ID
+  version = POM_VERSION
+
+  bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    dryRun = false
+
+    pkg {
+      repo = POM_REPO
+      name = POM_NAME
+      desc = POM_DESCRIPTION
+      websiteUrl = POM_WEBSITE_URL
+      vcsUrl = POM_VCS_URL
+      issueTrackerUrl = POM_ISSUE_TRACKER
+      licenses = [POM_LICENSE]
+    }
+  }
+
+  if (project.getPlugins().hasPlugin('com.android.application') ||
+      project.getPlugins().hasPlugin('com.android.library')) {
+
+    task androidJavadocs(type: Javadoc) {
+      source = android.sourceSets.main.java.source
+      classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+
+    task javadocJar(type: Jar, dependsOn: androidJavadocs) {
+      classifier = 'javadoc'
+      from androidJavadocs.destinationDir
+    }
+
+    task sourcesJar(type: Jar) {
+      classifier = 'sources'
+      from android.sourceSets.main.java.source
+    }
+  } else {
+    task sourcesJar(type: Jar, dependsOn: classes) {
+      classifier = 'sources'
+      from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+      classifier = 'javadoc'
+      from javadoc.destinationDir
+    }
+  }
+
+  artifacts {
+    archives sourcesJar
+    archives javadocJar
+  }
+
+  install {
+    repositories.mavenInstaller {
+      pom.project {
+        packaging POM_PACKAGING
+        groupId POM_GROUP_ID
+        artifactId POM_ARTIFACT_ID
+        version POM_VERSION
+
+        name POM_NAME
+        url POM_VCS_URL
+
+        licenses {
+          license {
+            name POM_LICENSE_NAME
+            url POM_LICENSE_URL
+            distribution POM_LICENSE_DISTRIBUTION
+          }
+        }
+        developers {
+          developer {
+            id POM_DEVELOPER_ID
+            name POM_DEVELOPER_NAME
+          }
+        }
+        scm {
+          connection POM_SCM_URL_CONNECTION
+          url POM_SCM_URL
+        }
+      }
+    }
+  }
+
+  publishing.publications {
+    maven(MavenPublication) {
+      groupId POM_GROUP_ID
+      artifactId POM_ARTIFACT_ID
+      version POM_VERSION
+
+      artifact bundleRelease
+      artifact javadocJar
+      artifact sourcesJar
+
+      pom.withXml {
+        def dependenciesNode = asNode().appendNode('dependencies')
+
+        // List all compile dependencies and write to POM
+        configurations.compile.getAllDependencies().each { Dependency dep ->
+          if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+            return // ignore invalid dependencies
+
+          def dependencyNode = dependenciesNode.appendNode('dependency')
+          dependencyNode.appendNode('groupId', dep.group)
+          dependencyNode.appendNode('artifactId', dep.name)
+          dependencyNode.appendNode('version', dep.version)
+
+          if (!dep.transitive) {
+            // If this dependency is transitive, we should force exclude all its dependencies them from the POM
+            def exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+            exclusionNode.appendNode('groupId', '*')
+            exclusionNode.appendNode('artifactId', '*')
+          } else if (!dep.properties.excludeRules.empty) {
+            // Otherwise add specified exclude rules
+            def exclusionsNode = dependencyNode.appendNode('exclusions')
+            dep.properties.excludeRules.each { ExcludeRule rule ->
+              def exclusionNode = exclusionsNode.appendNode('exclusion')
+              exclusionNode.appendNode('groupId', rule.group ?: '*')
+              exclusionNode.appendNode('artifactId', rule.module ?: '*')
+            }
+          }
+        }
+      }
+    }
+  }
+}

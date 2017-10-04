@@ -1,10 +1,5 @@
-buildscript {
-  dependencies {
-    classpath dep.androidPlugin
-  }
-}
-
 apply plugin: 'com.android.library'
+apply from: rootProject.file('gradle/publish.gradle')
 
 android {
   compileSdkVersion rootProject.ext.compileSdkVersion
@@ -40,5 +35,3 @@ dependencies {
   testImplementation dep.festAndroid
   testImplementation dep.pollexor
 }
-
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
