@@ -11,22 +11,13 @@ For more information please see [the website][1]
 
 Download
 --------
-
-Download [the latest JAR][2] or grab via Gradle:
 ```groovy
-compile 'com.squareup.picasso:picasso:2.5.2'
-```
-or Maven:
-```xml
-<dependency>
-  <groupId>com.squareup.picasso</groupId>
-  <artifactId>picasso</artifactId>
-  <version>2.5.2</version>
-</dependency>
-```
+repositories {
+  maven { url "https://dl.bintray.com/minyushov/android" }
+}
 
-Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
-
+compile 'com.minyushov.android:picasso:3.0.0-1'
+```
 
 
 ProGuard
