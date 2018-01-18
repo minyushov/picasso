@@ -23,7 +23,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
-import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
@@ -45,8 +45,8 @@ final class PicassoDrawable extends Drawable {
       Picasso.LoadedFrom loadedFrom, boolean noFade, boolean debugging,
       DrawableFactory drawableFactory) {
     Drawable placeholder = target.getDrawable();
-    if (placeholder instanceof AnimationDrawable) {
-      ((AnimationDrawable) placeholder).stop();
+    if (placeholder instanceof Animatable) {
+      ((Animatable) placeholder).stop();
     }
     PicassoDrawable drawable =
         new PicassoDrawable(context, bitmap, placeholder, loadedFrom, noFade,
@@ -60,8 +60,8 @@ final class PicassoDrawable extends Drawable {
    */
   static void setPlaceholder(ImageView target, Drawable placeholderDrawable) {
     target.setImageDrawable(placeholderDrawable);
-    if (target.getDrawable() instanceof AnimationDrawable) {
-      ((AnimationDrawable) target.getDrawable()).start();
+    if (target.getDrawable() instanceof Animatable) {
+      ((Animatable) target.getDrawable()).start();
     }
   }
 

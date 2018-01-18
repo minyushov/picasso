@@ -21,11 +21,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
@@ -502,12 +504,12 @@ public class RequestCreator {
    *     setBackgroundDrawable(new BitmapDrawable(bitmap));
    *   }
    *
-   *   {@literal @}Override public void onBitmapFailed() {
-   *     setBackgroundResource(R.drawable.profile_error);
+   *   {@literal @}Override public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+   *     setBackgroundDrawable(errorDrawable);
    *   }
    *
    *   {@literal @}Override public void onPrepareLoad(Drawable placeHolderDrawable) {
-   *     frame.setBackgroundDrawable(placeHolderDrawable);
+   *     setBackgroundDrawable(placeHolderDrawable);
    *   }
    * }
    * </pre></blockquote>
@@ -521,8 +523,8 @@ public class RequestCreator {
    *     frame.setBackgroundDrawable(new BitmapDrawable(bitmap));
    *   }
    *
-   *   {@literal @}Override public void onBitmapFailed() {
-   *     frame.setBackgroundResource(R.drawable.profile_error);
+   *   {@literal @}Override public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+   *     frame.setBackgroundDrawable(errorDrawable);
    *   }
    *
    *   {@literal @}Override public void onPrepareLoad(Drawable placeHolderDrawable) {
@@ -746,7 +748,15 @@ public class RequestCreator {
 
   private Drawable getPlaceholderDrawable() {
     if (placeholderResId != 0) {
-      return picasso.context.getResources().getDrawable(placeholderResId);
+      if (Build.VERSION.SDK_INT >= 21) {
+        return picasso.context.getDrawable(placeholderResId);
+      } else if (Build.VERSION.SDK_INT >= 16) {
+        return picasso.context.getResources().getDrawable(placeholderResId);
+      } else {
+        TypedValue value = new TypedValue();
+        picasso.context.getResources().getValue(placeholderResId, value, true);
+        return picasso.context.getResources().getDrawable(value.resourceId);
+      }
     } else {
       return placeholderDrawable; // This may be null which is expected and desired behavior.
     }
