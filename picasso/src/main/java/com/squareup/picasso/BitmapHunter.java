@@ -226,7 +226,9 @@ class BitmapHunter implements Runnable {
       if (bitmap == null) {
         Source source = result.getSource();
         try {
-          bitmap = decodeStream(source, data);
+          if (!(action instanceof FetchAction)) {
+            bitmap = decodeStream(source, data);
+          }
         } finally {
           try {
             //noinspection ConstantConditions If bitmap is null then source is guranteed non-null.
