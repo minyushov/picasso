@@ -11,7 +11,7 @@ ext {
   dep = [
       androidPlugin      : 'com.android.tools.build:gradle:3.0.1',
       androidMavenPlugin : 'com.github.dcendents:android-maven-gradle-plugin:2.0',
-      bintrayPlugin      : 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3',
+      bintrayPlugin      : 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0',
       okhttp             : "com.squareup.okhttp3:okhttp:$okhttpVersion",
       mockWebServer      : "com.squareup.okhttp3:mockwebserver:$okhttpVersion",
       pollexor           : 'com.squareup:pollexor:2.0.4',
