@@ -568,18 +568,18 @@ public class Picasso {
     if (!action.willReplay()) {
       targetToAction.remove(action.getTarget());
     }
-    if (result != null) {
+    if (result == null && resultIsRequired(action)) {
+      action.error(e);
+      if (loggingEnabled) {
+        log(OWNER_MAIN, VERB_ERRORED, action.request.logId(), e.getMessage());
+      }
+    } else {
       if (from == null) {
         throw new AssertionError("LoadedFrom cannot be null.");
       }
       action.complete(result, from);
       if (loggingEnabled) {
         log(OWNER_MAIN, VERB_COMPLETED, action.request.logId(), "from " + from);
-      }
-    } else {
-      action.error(e);
-      if (loggingEnabled) {
-        log(OWNER_MAIN, VERB_ERRORED, action.request.logId(), e.getMessage());
       }
     }
   }
@@ -599,6 +599,14 @@ public class Picasso {
         deferredRequestCreator.cancel();
       }
     }
+  }
+
+  boolean shouldDecode(Action action) {
+    return !(action instanceof FetchAction) || MemoryPolicy.shouldWriteToMemoryCache(action.getMemoryPolicy());
+  }
+
+  boolean resultIsRequired(Action action) {
+    return shouldDecode(action);
   }
 
   /**

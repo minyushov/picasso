@@ -101,7 +101,7 @@ class BitmapHunter implements Runnable {
   Priority priority;
 
   BitmapHunter(Picasso picasso, Dispatcher dispatcher, Cache cache, Stats stats, Action action,
-      RequestHandler requestHandler) {
+               RequestHandler requestHandler) {
     this.sequence = SEQUENCE_GENERATOR.incrementAndGet();
     this.picasso = picasso;
     this.dispatcher = dispatcher;
@@ -174,7 +174,7 @@ class BitmapHunter implements Runnable {
 
       result = hunt();
 
-      if (result == null) {
+      if (result == null && picasso.resultIsRequired(action)) {
         dispatcher.dispatchFailed(this);
       } else {
         dispatcher.dispatchComplete(this);
@@ -222,12 +222,16 @@ class BitmapHunter implements Runnable {
       exifOrientation = result.getExifOrientation();
       bitmap = result.getBitmap();
 
-      // If there was no Bitmap then we need to decode it from the stream.
       if (bitmap == null) {
         Source source = result.getSource();
         try {
-          if (!(action instanceof FetchAction)) {
+          // If there was no Bitmap, and the action allows then we need to decode the Bitmap
+          // from the stream. Otherwise we need to read the source in order to cache network
+          // response to the disk.
+          if (picasso.shouldDecode(action)) {
             bitmap = decodeStream(source, data);
+          } else {
+            Okio.buffer(source).readAll(Okio.blackhole());
           }
         } finally {
           try {
@@ -423,7 +427,7 @@ class BitmapHunter implements Runnable {
   }
 
   static BitmapHunter forRequest(Picasso picasso, Dispatcher dispatcher, Cache cache, Stats stats,
-      Action action) {
+                                 Action action) {
     Request request = action.getRequest();
     List<RequestHandler> requestHandlers = picasso.getRequestHandlers();
 
@@ -538,7 +542,7 @@ class BitmapHunter implements Runnable {
           double maxY = Math.max(y4T, Math.max(y3T, Math.max(y1T, y2T)));
           double minY = Math.min(y4T, Math.min(y3T, Math.min(y1T, y2T)));
           targetWidth = (int) Math.floor(maxX - minX);
-          targetHeight  = (int) Math.floor(maxY - minY);
+          targetHeight = (int) Math.floor(maxY - minY);
         } else {
           matrix.setRotate(targetRotation);
           // Recalculate dimensions after rotation (around origin)
@@ -556,7 +560,7 @@ class BitmapHunter implements Runnable {
           double maxY = Math.max(y4T, Math.max(y3T, Math.max(y1T, y2T)));
           double minY = Math.min(y4T, Math.min(y3T, Math.min(y1T, y2T)));
           targetWidth = (int) Math.floor(maxX - minX);
-          targetHeight  = (int) Math.floor(maxY - minY);
+          targetHeight = (int) Math.floor(maxY - minY);
         }
       }
 
@@ -568,10 +572,10 @@ class BitmapHunter implements Runnable {
         if (exifRotation != 0) {
           matrix.preRotate(exifRotation);
           if (exifRotation == 90 || exifRotation == 270) {
-             // Recalculate dimensions after exif rotation
-             int tmpHeight = targetHeight;
-             targetHeight = targetWidth;
-             targetWidth = tmpHeight;
+            // Recalculate dimensions after exif rotation
+            int tmpHeight = targetHeight;
+            targetHeight = targetWidth;
+            targetWidth = tmpHeight;
           }
         }
         if (exifTranslation != 1) {
@@ -654,9 +658,9 @@ class BitmapHunter implements Runnable {
   }
 
   private static boolean shouldResize(boolean onlyScaleDown, int inWidth, int inHeight,
-      int targetWidth, int targetHeight) {
+                                      int targetWidth, int targetHeight) {
     return !onlyScaleDown || (targetWidth != 0 && inWidth > targetWidth)
-            || (targetHeight != 0 && inHeight > targetHeight);
+        || (targetHeight != 0 && inHeight > targetHeight);
   }
 
   static int getExifRotation(int orientation) {
@@ -680,7 +684,7 @@ class BitmapHunter implements Runnable {
     return rotation;
   }
 
- static int getExifTranslation(int orientation)  {
+  static int getExifTranslation(int orientation) {
     int translation;
     switch (orientation) {
       case ORIENTATION_FLIP_HORIZONTAL:
