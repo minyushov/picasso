@@ -32,6 +32,7 @@ afterEvaluate { project ->
       project.getPlugins().hasPlugin('com.android.library')) {
 
     task androidJavadocs(type: Javadoc) {
+      failOnError = false
       source = android.sourceSets.main.java.source
       classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     }
