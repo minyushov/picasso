@@ -16,7 +16,7 @@ repositories {
   maven { url "https://dl.bintray.com/minyushov/android" }
 }
 
-implementation 'com.minyushov.android:picasso:3.0.0-1'
+implementation 'com.minyushov.android:picasso:3.0.0-2'
 ```
 
 
