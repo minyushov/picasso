@@ -568,9 +568,9 @@ public class Picasso {
     if (!action.willReplay()) {
       targetToAction.remove(action.getTarget());
     }
-    if (result == null && resultIsRequired(action)) {
+    if (e != null || (result == null && resultIsRequired(action))) {
       action.error(e);
-      if (loggingEnabled) {
+      if (loggingEnabled && e != null) {
         log(OWNER_MAIN, VERB_ERRORED, action.request.logId(), e.getMessage());
       }
     } else {
