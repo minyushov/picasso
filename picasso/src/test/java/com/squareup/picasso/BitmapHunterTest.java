@@ -29,16 +29,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowBitmap;
 import org.robolectric.shadows.ShadowMatrix;
 
 import static android.graphics.Bitmap.Config.ARGB_8888;
-import static android.support.media.ExifInterface.ORIENTATION_FLIP_HORIZONTAL;
-import static android.support.media.ExifInterface.ORIENTATION_FLIP_VERTICAL;
-import static android.support.media.ExifInterface.ORIENTATION_ROTATE_90;
-import static android.support.media.ExifInterface.ORIENTATION_TRANSPOSE;
-import static android.support.media.ExifInterface.ORIENTATION_TRANSVERSE;
+import static androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_HORIZONTAL;
+import static androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_VERTICAL;
+import static androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90;
+import static androidx.exifinterface.media.ExifInterface.ORIENTATION_TRANSPOSE;
+import static androidx.exifinterface.media.ExifInterface.ORIENTATION_TRANSVERSE;
 import static com.google.common.truth.Truth.assertThat;
 import static com.squareup.picasso.BitmapHunter.forRequest;
 import static com.squareup.picasso.BitmapHunter.transformResult;
@@ -81,7 +81,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class BitmapHunterTest {
 
   @Mock Context context;

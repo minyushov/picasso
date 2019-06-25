@@ -1,32 +1,32 @@
 ext {
   versions = [
-    java            : JavaVersion.VERSION_1_8,
+    java      : JavaVersion.VERSION_1_8,
 
-    minSdk          : 14,
-    targetSdk       : 28,
-    compileSdk      : 28,
+    minSdk    : 14,
+    targetSdk : 28,
+    compileSdk: 28,
 
-    buildTools      : "28.0.3",
+    buildTools: "28.0.3",
 
-    okhttp          : "3.12.3",
-    supportLibraries: "28.0.0"
+    okhttp    : "3.12.3"
   ]
 
   deps = [
-    androidPlugin     : 'com.android.tools.build:gradle:3.4.1',
-    androidMavenPlugin: 'com.github.dcendents:android-maven-gradle-plugin:2.0',
-    bintrayPlugin     : 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0',
-    okhttp            : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
-    mockWebServer     : "com.squareup.okhttp3:mockwebserver:${versions.okhttp}",
-    pollexor          : 'com.squareup:pollexor:2.0.4',
-    supportV4         : "com.android.support:support-v4:${versions.supportLibraries}",
-    supportAnnotations: "com.android.support:support-annotations:${versions.supportLibraries}",
-    supportCompat     : "com.android.support:support-compat:${versions.supportLibraries}",
-    supportFragment   : "com.android.support:support-fragment:${versions.supportLibraries}",
-    supportExif       : "com.android.support:exifinterface:${versions.supportLibraries}",
-    junit             : 'junit:junit:4.12',
-    truth             : 'com.google.truth:truth:0.36',
-    robolectric       : 'org.robolectric:robolectric:3.1',
-    mockito           : 'org.mockito:mockito-core:1.9.5'
+    androidPlugin: "com.android.tools.build:gradle:3.4.1",
+    bintrayPlugin: "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0",
+
+    okhttp       : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
+    mockWebServer: "com.squareup.okhttp3:mockwebserver:${versions.okhttp}",
+    pollexor     : "com.squareup:pollexor:2.0.4",
+
+    annotations  : "androidx.annotation:annotation:1.0.0",
+    appcompat    : "androidx.appcompat:appcompat:1.0.2",
+    fragment     : "androidx.fragment:fragment:1.0.0",
+    exif         : "androidx.exifinterface:exifinterface:1.0.0",
+
+    junit        : "junit:junit:4.12",
+    truth        : "com.google.truth:truth:0.36",
+    robolectric  : "org.robolectric:robolectric:4.3",
+    mockito      : "org.mockito:mockito-core:2.28.2"
   ]
 }

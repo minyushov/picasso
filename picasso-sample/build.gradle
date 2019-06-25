@@ -28,8 +28,8 @@ android {
 }
 
 dependencies {
-  compileOnly deps.supportAnnotations
-  implementation deps.supportCompat
-  implementation deps.supportFragment
+  compileOnly deps.annotations
+  implementation deps.appcompat
+  implementation deps.fragment
   implementation project(':picasso')
 }

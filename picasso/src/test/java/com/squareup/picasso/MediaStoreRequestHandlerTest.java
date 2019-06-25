@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowBitmap;
 
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(shadows = { Shadows.ShadowVideoThumbnails.class, Shadows.ShadowImageThumbnails.class })
 public class MediaStoreRequestHandlerTest {
 
@@ -92,10 +92,10 @@ public class MediaStoreRequestHandlerTest {
     ShadowBitmap shadowA = shadowOf(a);
     ShadowBitmap shadowB = shadowOf(b);
 
-    if (shadowA.getHeight() != shadowB.getHeight()) {
+    if (a.getHeight() != b.getHeight()) {
       fail();
     }
-    if (shadowA.getWidth() != shadowB.getWidth()) {
+    if (a.getWidth() != b.getWidth()) {
       fail();
     }
     if (shadowA.getDescription() != null ? !shadowA.getDescription().equals(shadowB.getDescription()) : shadowB.getDescription() != null) {

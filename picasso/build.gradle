@@ -18,12 +18,16 @@ android {
     textReport true
     lintConfig file('lint.xml')
   }
+
+  testOptions {
+    unitTests.includeAndroidResources = true
+  }
 }
 
 dependencies {
   api deps.okhttp
-  compileOnly deps.supportAnnotations
-  implementation deps.supportExif
+  compileOnly deps.annotations
+  implementation deps.exif
   testImplementation deps.junit
   testImplementation deps.truth
   testImplementation deps.robolectric
