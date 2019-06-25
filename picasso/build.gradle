@@ -2,12 +2,16 @@ apply plugin: 'com.android.library'
 apply from: rootProject.file('gradle/publish.gradle')
 
 android {
-  compileSdkVersion rootProject.ext.compileSdkVersion
-  buildToolsVersion rootProject.ext.buildToolsVersion
+  compileSdkVersion versions.compileSdk
+
+  defaultConfig {
+    minSdkVersion versions.minSdk
+    consumerProguardFiles 'consumer-proguard-rules.txt'
+  }
 
   compileOptions {
-    sourceCompatibility rootProject.ext.sourceCompatibilityVersion
-    targetCompatibility rootProject.ext.targetCompatibilityVersion
+    sourceCompatibility versions.sourceCompatibility
+    targetCompatibility versions.targetCompatibility
   }
 
   lintOptions {
@@ -15,24 +19,14 @@ android {
     textReport true
     lintConfig file('lint.xml')
   }
-
-  dexOptions {
-    preDexLibraries = !rootProject.ext.isCi
-  }
-
-  defaultConfig {
-    minSdkVersion rootProject.ext.minSdkVersion
-
-    consumerProguardFiles 'consumer-proguard-rules.txt'
-  }
 }
 
 dependencies {
   api dep.okhttp
   compileOnly dep.supportAnnotations
+  implementation deps.supportAnnotations
   testImplementation dep.junit
   testImplementation dep.truth
-  testImplementation dep.supportV4
   testImplementation dep.robolectric
   testImplementation dep.mockito
   testImplementation dep.mockWebServer

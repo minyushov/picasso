@@ -23,10 +23,7 @@ implementation 'com.minyushov.android:picasso:3.0.0-2'
 ProGuard
 --------
 
-If you are using ProGuard you might need to add the following option:
-```
--dontwarn com.squareup.okhttp.**
-```
+If you are using ProGuard you might need to add OkHttp's rules: https://github.com/square/okhttp/#proguard
 
 
 
