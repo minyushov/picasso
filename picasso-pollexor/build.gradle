@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply from: rootProject.file('gradle/publish.gradle')
 
 android {
   compileSdkVersion versions.compileSdk
@@ -9,8 +8,8 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility versions.sourceCompatibility
-    targetCompatibility versions.targetCompatibility
+    sourceCompatibility versions.java
+    targetCompatibility versions.java
   }
 
   lintOptions {
@@ -22,10 +21,10 @@ android {
 
 dependencies {
   api project(':picasso')
-  api dep.pollexor
-  compileOnly dep.supportAnnotations
-  testImplementation dep.junit
-  testImplementation dep.robolectric
-  testImplementation dep.truth
-  testImplementation dep.pollexor
+  api deps.pollexor
+  compileOnly deps.supportAnnotations
+  testImplementation deps.junit
+  testImplementation deps.robolectric
+  testImplementation deps.truth
+  testImplementation deps.pollexor
 }

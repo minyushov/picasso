@@ -13,8 +13,8 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility versions.sourceCompatibility
-    targetCompatibility versions.targetCompatibility
+    sourceCompatibility versions.java
+    targetCompatibility versions.java
   }
 
   lintOptions {

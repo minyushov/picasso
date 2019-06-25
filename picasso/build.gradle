@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply from: rootProject.file('gradle/publish.gradle')
 
 android {
   compileSdkVersion versions.compileSdk
@@ -10,8 +9,8 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility versions.sourceCompatibility
-    targetCompatibility versions.targetCompatibility
+    sourceCompatibility versions.java
+    targetCompatibility versions.java
   }
 
   lintOptions {
@@ -22,12 +21,12 @@ android {
 }
 
 dependencies {
-  api dep.okhttp
-  compileOnly dep.supportAnnotations
-  implementation deps.supportAnnotations
-  testImplementation dep.junit
-  testImplementation dep.truth
-  testImplementation dep.robolectric
-  testImplementation dep.mockito
-  testImplementation dep.mockWebServer
+  api deps.okhttp
+  compileOnly deps.supportAnnotations
+  implementation deps.supportExif
+  testImplementation deps.junit
+  testImplementation deps.truth
+  testImplementation deps.robolectric
+  testImplementation deps.mockito
+  testImplementation deps.mockWebServer
 }
