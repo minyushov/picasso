@@ -13,7 +13,7 @@ ext {
 
   deps = [
     androidPlugin: "com.android.tools.build:gradle:3.4.1",
-    bintrayPlugin: "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0",
+    bintrayPlugin: "com.minyushov.gradle:bintray:1.2.4",
 
     okhttp       : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
     mockWebServer: "com.squareup.okhttp3:mockwebserver:${versions.okhttp}",

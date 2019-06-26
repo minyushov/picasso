@@ -1,12 +1,19 @@
 buildscript {
   apply from: rootProject.file('gradle/dependencies.gradle')
-
+  ext {
+    libraryRepo = "android"
+    libraryGroupId = "com.minyushov.android"
+    libraryVcsUrl = "https://github.com/minyushov/picasso.git"
+    libraryLicense = "Apache-2.0"
+    libraryVersion = "3.0.0-4"
+  }
   repositories {
     jcenter()
     google()
   }
   dependencies {
     classpath deps.androidPlugin
+    classpath deps.bintrayPlugin
   }
 }
 
