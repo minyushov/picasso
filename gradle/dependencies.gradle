@@ -3,16 +3,16 @@ ext {
     java      : JavaVersion.VERSION_1_8,
 
     minSdk    : 14,
-    targetSdk : 28,
-    compileSdk: 28,
+    targetSdk : 29,
+    compileSdk: 29,
 
-    buildTools: "28.0.3",
+    buildTools: "29.0.2",
 
     okhttp    : "3.12.3"
   ]
 
   deps = [
-    androidPlugin: "com.android.tools.build:gradle:3.4.1",
+    androidPlugin: "com.android.tools.build:gradle:3.5.3",
     bintrayPlugin: "com.minyushov.gradle:bintray:1.2.4",
 
     okhttp       : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
