@@ -143,6 +143,7 @@ class BitmapHunter implements Runnable {
       return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
     } else {
       InputStream stream = bufferedSource.inputStream();
+      ExceptionCatchingInputStream catchingStream = new ExceptionCatchingInputStream(stream);
       if (calculateSize) {
         // TODO use an InputStream that buffers with Okio...
         MarkableInputStream markStream = new MarkableInputStream(stream);
@@ -150,6 +151,10 @@ class BitmapHunter implements Runnable {
         markStream.allowMarksToExpire(false);
         long mark = markStream.savePosition(1024);
         BitmapFactory.decodeStream(stream, null, options);
+        IOException exception = catchingStream.getException();
+        if (exception != null) {
+          throw exception;
+        }
         RequestHandler.calculateInSampleSize(request.targetWidth, request.targetHeight, options,
             request);
         markStream.reset(mark);
@@ -159,6 +164,10 @@ class BitmapHunter implements Runnable {
       if (bitmap == null) {
         // Treat null as an IO exception, we will eventually retry.
         throw new IOException("Failed to decode stream.");
+      }
+      IOException exception = catchingStream.getException();
+      if (exception != null) {
+        throw exception;
       }
       return bitmap;
     }
