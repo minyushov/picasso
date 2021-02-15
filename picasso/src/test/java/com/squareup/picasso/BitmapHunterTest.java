@@ -34,6 +34,7 @@ import org.robolectric.shadows.ShadowBitmap;
 import org.robolectric.shadows.ShadowMatrix;
 
 import static android.graphics.Bitmap.Config.ARGB_8888;
+import static android.os.Looper.getMainLooper;
 import static androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_HORIZONTAL;
 import static androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_VERTICAL;
 import static androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90;
@@ -1016,6 +1017,7 @@ public class BitmapHunterTest {
     Bitmap original = Bitmap.createBitmap(10, 10, ARGB_8888);
     try {
       BitmapHunter.applyCustomTransformations(transformations, original);
+      shadowOf(getMainLooper()).idle();
       fail("Expected exception to be thrown.");
     } catch (RuntimeException e) {
       assertThat(e).hasMessageThat().isEqualTo("Transformation " + badTransformation.key() + " crashed with exception.");
@@ -1036,6 +1038,7 @@ public class BitmapHunterTest {
     Bitmap original = Bitmap.createBitmap(10, 10, ARGB_8888);
     try {
       BitmapHunter.applyCustomTransformations(transformations, original);
+      shadowOf(getMainLooper()).idle();
       fail("Expected exception to be thrown.");
     } catch (RuntimeException e) {
       assertThat(e).hasMessageThat().contains(
@@ -1058,6 +1061,7 @@ public class BitmapHunterTest {
     Bitmap original = Bitmap.createBitmap(10, 10, ARGB_8888);
     try {
       BitmapHunter.applyCustomTransformations(transformations, original);
+      shadowOf(getMainLooper()).idle();
       fail("Expected exception to be thrown.");
     } catch (RuntimeException e) {
       assertThat(e).hasMessageThat().isEqualTo("Transformation "
@@ -1081,6 +1085,7 @@ public class BitmapHunterTest {
     Bitmap original = Bitmap.createBitmap(10, 10, ARGB_8888);
     try {
       BitmapHunter.applyCustomTransformations(transformations, original);
+      shadowOf(getMainLooper()).idle();
       fail("Expected exception to be thrown.");
     } catch (RuntimeException e) {
       assertThat(e).hasMessageThat().isEqualTo("Transformation "
